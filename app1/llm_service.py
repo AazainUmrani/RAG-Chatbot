@@ -7,9 +7,8 @@ import requests
 import os
 client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
 model_id = "sentence-transformers/all-mpnet-base-v2"
-hf_token = os.getenv("HF_API_TOKEN")
 api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_id}"
-headers = {"Authorization": f"Bearer {hf_token}"}
+headers = {"Authorization": f"Bearer {os.getenv("HF_API_TOKEN")}"}
 conversation_history = []
 def query(text):
     response = requests.post(api_url, headers=headers, json={"inputs": text, "options": {"wait_for_model": True}})
