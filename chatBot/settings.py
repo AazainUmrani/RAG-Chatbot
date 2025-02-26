@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 ]
 import os
-os.environ['HF_API_TOKEN'] = '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'
-os.environ["GENAI_API_KEY"] = 'AIzaSyAQ4-rrx_IwNhlJjnUBmtDG6g7aLRfdsJw'
+os.environ['HF_API_TOKEN'] = 'Your_HF_Token'
+os.environ["GENAI_API_KEY"] = 'Your_Genai_apiKey'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
