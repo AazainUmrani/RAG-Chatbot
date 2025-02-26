@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intersys Limited - Chatbot</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f4f4f9, #e2e2e2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            width: 450px;
+            height: 80vh; /* Adjusted height */
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Section */
+        .chat-header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .chat-header img {
+            width: 150px; /* Adjusted logo size */
+            height: auto;
+        }
+
+        /* Chat Box */
+        .chat-box {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #fafafa;
+            border-bottom: 1px solid #ddd;
+            max-height: 70vh; /* Ensures it stays within view */
+        }
+
+        /* Messages */
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.bot {
+            background: #e9ecef;
+            color: #333;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        /* Chat Input */
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: #0056b3;
+        }
+
+        /* Scrollbar Styling */
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 4px;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <img src="https://www.intersyslimited.com/assets/images/logo-white.svg" 
+                 alt="Intersys Limited Logo">
+        </div>
+
+        <!-- Chat Box -->
+        <div class="chat-box" id="chat-box">
+            <div class="message bot">Hello! How can I assist you today?</div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (!userInput.trim()) return; // Ignore empty messages
+
+            appendMessage('user', userInput);
+            document.getElementById('user-input').value = '';
+
+            fetch('/app1/chatbot/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ query: userInput })
+            })
+            .then(response => response.json())
+            .then(data => appendMessage('bot', data.response))
+            .catch(error => {
+                console.error('Error:', error);
+                appendMessage('bot', 'Sorry, something went wrong.');
+            });
+        }
+
+        function appendMessage(sender, message) {
+    const chatBox = document.getElementById('chat-box');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', sender);
+
+    // Convert Markdown to HTML
+    if (sender === 'bot') {
+        const converter = new showdown.Converter();
+        messageElement.innerHTML = converter.makeHtml(message);
+    } else {
+        messageElement.textContent = message;
+    }
+
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+        // Handle "Enter" key press to send message
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
