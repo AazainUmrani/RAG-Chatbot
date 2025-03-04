@@ -17,10 +17,27 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+# from app1.views import login_view
+from app1 import views
+
+# urlpatterns = [
+#     path('login/', login_view, name='login'),
+#     path('admin/', admin.site.urls),
+#     path('app1/', include('app1.urls')),  # Include app1's urls
+# ]
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('app1/', include('app1.urls')),  # Include app1's urls
+    path('admin/', admin.site.urls),  
+    path('chatbot/', views.chatbot_view, name='chatbot_view'),
+    path('chatbot/api/', views.chatbot_api, name='chatbot_api'),
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('app1/', include('app1.urls')),
+    path('logout/', views.logout_view, name='logout'), 
+
 ]
 
 
+
+    

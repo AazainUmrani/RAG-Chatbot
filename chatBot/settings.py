@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 ]
 import os
-os.environ['HF_API_TOKEN'] = 'Your_HF_Token'
-os.environ["GENAI_API_KEY"] = 'Your_Genai_apiKey'
+os.environ['HF_API_TOKEN'] = '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'
+os.environ["GENAI_API_KEY"] = 'AIzaSyAQ4-rrx_IwNhlJjnUBmtDG6g7aLRfdsJw'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'chatBot.urls'
 
@@ -86,13 +87,17 @@ WSGI_APPLICATION = 'chatBot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'testDatabase',
+        'USER': 'root',
+        'PASSWORD': '12344321',
+        'HOST': 'localhost',
+        #'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
