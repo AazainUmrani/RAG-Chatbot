@@ -91,13 +91,19 @@ WSGI_APPLICATION = 'chatBot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'testDatabase',
+        'NAME': 'database_embeddings',
         'USER': 'root',
         'PASSWORD': '12344321',
         'HOST': 'localhost',
-        #'PORT': '3306',
     }
 }
+MYSQL_DB_CONFIG = {
+    'HOST': DATABASES['default']['HOST'],
+    'USER': DATABASES['default']['USER'],
+    'PASSWORD': DATABASES['default']['PASSWORD'],
+    'NAME': DATABASES['default']['NAME'],
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

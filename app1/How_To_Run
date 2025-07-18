@@ -1,0 +1,12 @@
+Save the file to read in Dataset folder
+Change the path in embeding script.py to load the file
+Change the heading array to match with the headings of paragraph in data else if the data is following similar format in headings just automate to read the headings
+Change the data base credentials
+Run EmbeddingScript.py it will create the embeddings and store in the database
+Install requirements.txt
+Change the GEMINI and Hugging API keys in settings.py
+Then run following commands to run locally
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+

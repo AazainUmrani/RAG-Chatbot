@@ -1,7 +1,13 @@
+import os 
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chatBot.settings')
+django.setup()
 from app1.llm_service import query
 from docx import Document
 import mysql.connector
 from mysql.connector import Error
+import json
+from django.conf import settings
 
 # Function to read and create chunks
 def extract_chunks_by_headings(doc, headings):
@@ -32,11 +38,12 @@ def extract_chunks_by_headings(doc, headings):
 # Function to insert embeddings into MySQL
 def insert_embeddings_into_mysql(headings, embeddings):
     try:
+        db_config = settings.MYSQL_DB_CONFIG
         db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            passwd="12344321",
-            database="testDatabase"
+            host=db_config['HOST'],
+            user=db_config['USER'],
+            passwd=db_config['PASSWORD'],
+            database=db_config['NAME'],
         )
         cursor = db.cursor()
 
@@ -52,7 +59,7 @@ def insert_embeddings_into_mysql(headings, embeddings):
         cursor.execute(create_table_query)
         insert_query = "INSERT INTO embeddings (heading, embedding, content) VALUES (%s, %s, %s)"
         for heading, embedding, content in zip(headings, embeddings, documents):
-            cursor.execute(insert_query, (heading, str(embedding), content))  # Convert embedding list to string for JSON storage
+            cursor.execute(insert_query, (heading, json.dumps(embedding.tolist()), content))  # Convert embedding list to string for JSON storage
 
         db.commit()
         print("Embeddings inserted successfully!")
@@ -65,9 +72,22 @@ def insert_embeddings_into_mysql(headings, embeddings):
             db.close()
 
 
+doc = Document(r'C:\Users\aazain\development\RAG-Chatbot\Dataset\Dataset-1.docx')
 
+# Automated code to fetch headings if no headings are defined
+# def extract_headings(document):
 
-doc = Document('/Users/apple/Downloads/RAG/Dataset-1.docx')
+#     headings = []
+
+#     for para in document.paragraphs:
+#         style = para.style.name
+#         if style.startswith('Heading'):
+#             headings.append((style, para.text.strip()))
+    
+#     return headings
+
+# headings = extract_headings(doc)
+
 
 # Define the headings you want to extract
 headings = [
